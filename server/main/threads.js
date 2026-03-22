@@ -16,13 +16,13 @@ const Threads = function(logger, client, configMain) {
 
   // Start Pool Server
   /* istanbul ignore next */
-  this.setupThreads = function() {
+  this.setupThreads = async function() {
 
     // Handle Master Forks
     if (cluster.isMaster) {
       const loader = new Loader(_this.logger, _this.configMain);
       const builder = new Builder(_this.logger, _this.configMain);
-      const configs = loader.handleConfigs();
+      const configs = await loader.handleConfigs();
       _this.client.master.commands.schema.handleSchema(configs, () => {
         _this.client.worker.commands.schema.handleSchema(configs, () => {
           builder.configs = configs;

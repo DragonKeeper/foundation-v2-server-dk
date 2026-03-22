@@ -20,7 +20,7 @@ const Commands = function (logger, client, configMain) {
   this.retries = 0;
 
   // Execute Commands
-  /* eslint-disable */
+   
   this.executor = function(commands, callback) {
     const query = commands.join(' ')
     _this.client.query(query, (error, results) => {

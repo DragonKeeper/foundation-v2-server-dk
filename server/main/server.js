@@ -72,7 +72,7 @@ function Server(logger, client) {
 
     // Handles API Errors
     /* istanbul ignore next */
-    /* eslint-disable-next-line no-unused-vars */
+     
     app.use((err, req, res, next) => {
       _this.handleErrors(api, err, res);
     });

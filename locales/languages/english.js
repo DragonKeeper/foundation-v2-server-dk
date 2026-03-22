@@ -1,4 +1,5 @@
 const english = {
+  loaderTemplateText1: () => 'Pool template module not found. Please check your template configuration.',
   websiteErrorText1: (error) => `Website error: ${error}`,
   websiteErrorText2: () => 'The server was unable to handle your request. Verify your input or try again later',
   websiteStartingText2: (host, port) => `Server started on ${host}:${port}`,

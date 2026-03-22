@@ -25,17 +25,17 @@ config.client.tls = false;
 config.client.master = {};
 config.client.master.host = '127.0.0.1';
 config.client.master.port = 5432;
-config.client.master.username = 'raven';
-config.client.master.password = 'Liveandletlive12!';
-config.client.master.database = 'raven_pool_master';
+config.client.master.username = '[dbuser]';
+config.client.master.password = '[password]';
+config.client.master.database = '[database]';
 
 // Worker Database
 config.client.worker = {};
 config.client.worker.host = '127.0.0.1';
 config.client.worker.port = 5432;
-config.client.worker.username = 'raven';
-config.client.worker.password = 'Liveandletlive12!';
-config.client.worker.database = 'raven_pool_worker';
+config.client.worker.username = '[dbuser]';
+config.client.worker.password = '[password]]';
+config.client.worker.database = '[database]';
 
 // Clustering Configuration
 config.clustering = {};

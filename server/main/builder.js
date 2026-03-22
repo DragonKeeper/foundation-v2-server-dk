@@ -67,6 +67,11 @@ const Builder = function(logger, configMain) {
     const numForks = utils.countProcessForks(_this.configMain);
 
     // Check if any Valid Configs Exist
+    if (!_this.configs || typeof _this.configs !== 'object' || Array.isArray(_this.configs) || typeof _this.configs.then === 'function') {
+      const lines = [_this.text.builderThreadsText2()];
+      _this.logger.error('Builder', 'Workers', ['Invalid or unresolved configs object.']);
+      return;
+    }
     if (Object.keys(_this.configs).length === 0) {
       const lines = [_this.text.builderThreadsText2()];
       _this.logger.error('Builder', 'Workers', lines);

@@ -1,5 +1,5 @@
 import Logger from '../main/logger.js';
-/* eslint-disable-next-line no-unused-vars */
+ 
 import colors from 'colors';
 import configMain from '../../configs/main/example.js';
 

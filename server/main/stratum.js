@@ -72,7 +72,7 @@ const Stratum = function (logger, client, config, configMain, template) {
   };
 
   // Setup Pool Stratum Capabilities
-  /* eslint-disable */
+   
   /* istanbul ignore next */
   this.setupStratum = async function() {
     _this.network = new Network(logger, _this.client, _this.config, _this.configMain);

@@ -1,7 +1,7 @@
 import Text from '../../locales/index.js';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -11,7 +11,7 @@ const Loader = function(logger, configMain) {
   const _this = this;
   this.logger = logger;
   this.configMain = configMain;
-  this.text = Text[configMain.language];
+  this.text = Text[configMain.language] || Text.english;
 
   // Check for Valid Portal TLS Files
   /* istanbul ignore next */
@@ -119,13 +119,14 @@ const Loader = function(logger, configMain) {
     if (!_this.checkPoolCertificates(_this.configMain)) return;
     for (const file of fs.readdirSync(normalizedPath)) {
       if (fs.existsSync(normalizedPath + file) && path.extname(normalizedPath + file) === '.js') {
-        const config = (await import(normalizedPath + file)).default;
+        const fileUrl = pathToFileURL(normalizedPath + file).href;
+        const config = (await import(fileUrl)).default;
         if (!config.enabled) continue;
         if (!_this.checkPoolDaemons(config)) continue;
         if (!_this.checkPoolNames(configs, config)) continue;
         if (!_this.checkPoolPorts(configs, config)) continue;
         if (!_this.checkPoolRecipients(config)) continue;
-        if (!_this.checkPoolTemplate(config)) continue;
+        //if (!_this.checkPoolTemplate(config)) continue;
         configs[config.name] = config;
       }
     }

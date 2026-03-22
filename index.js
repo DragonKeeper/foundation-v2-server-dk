@@ -6,9 +6,9 @@ import path from 'path';
 ////////////////////////////////////////////////////////////////////////////////
 
 // Start Main Stratum Server
-/* eslint-disable */
+ 
 try {
-  const config = (await import('./configs/main/example.js')).default;
+  const config = (await import('./configs/main/main.js')).default;
   const logger = new Logger(config);
 
   // Initialize Local/Remote Databases
