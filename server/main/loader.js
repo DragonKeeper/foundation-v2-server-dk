@@ -1,7 +1,12 @@
+
 import Text from '../../locales/index.js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
+
+// Define __filename and __dirname for ES module compatibility
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 ////////////////////////////////////////////////////////////////////////////////
 
