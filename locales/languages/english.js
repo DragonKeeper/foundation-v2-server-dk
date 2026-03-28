@@ -37,6 +37,7 @@ const english = {
   startingMessageText6: (height) => `Current block height: ${ height }`,
   startingMessageText7: (difficulty) => `Current network difficulty: ${ difficulty }`,
   startingMessageText8: (peers) => `Current peer count: ${ peers }`,
+  startingMessageText9: () => 'Server initialized successfully ...',
   websiteValidationText1: (param, expected) => `Invalid query parameter specified (${param}: ${expected}). Verify your input and try again`,
   websiteErrorText3: () => 'Requested pool does not exist.',
   websiteErrorText4: () => 'The requested method is not currently supported. Verify your input and try again',
