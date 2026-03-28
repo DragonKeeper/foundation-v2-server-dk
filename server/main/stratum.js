@@ -78,7 +78,6 @@ const Stratum = function (logger, client, config, configMain, template) {
     _this.network = new Network(logger, _this.client, _this.config, _this.configMain);
     _this.shares = new Shares(logger, _this.client, _this.config, _this.configMain);
     _this.handleStratum();
-
     await new Promise(resolve => _this.stratum.setupPrimaryDaemons(resolve));
     await new Promise(resolve => _this.stratum.setupAuxiliaryDaemons(resolve));
     _this.stratum.setupPorts();
