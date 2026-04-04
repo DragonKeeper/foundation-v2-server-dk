@@ -7,45 +7,45 @@ import cluster from 'cluster';
 ////////////////////////////////////////////////////////////////////////////////
 
 // Main Initializer Function
-const Threads = function(logger, client, configMain) {
+class Threads {
+  constructor(logger, client, configMain) {
 
-  const _this = this;
-  this.logger = logger;
-  this.client = client;
-  this.configMain = configMain;
+    const _this = this;
+    this.logger = logger;
+    this.client = client;
+    this.configMain = configMain;
 
-  // Start Pool Server
-  /* istanbul ignore next */
-  this.setupThreads = async function() {
+    // Start Pool Server
+    /* istanbul ignore next */
+    this.setupThreads = async function () {
 
-    // Handle Master Forks
-    if (cluster.isMaster) {
-      const loader = new Loader(_this.logger, _this.configMain);
-      const builder = new Builder(_this.logger, _this.configMain);
-      const configs = await loader.handleConfigs();
-      _this.client.master.commands.schema.handleSchema(configs, () => {
-        _this.client.worker.commands.schema.handleSchema(configs, () => {
-          builder.configs = configs;
-          builder.setupPoolServer();
-          builder.setupPoolWorkers();
-        });
-      });
-    }
-
-    // Handle Worker Forks
-    if (cluster.isWorker) {
-      switch (process.env.type) {
-      case 'server':
-        new Server(_this.logger, _this.client).setupServer(() => {});
-        break;
-      case 'worker':
-        new Workers(_this.logger, _this.client).setupWorkers(() => {});
-        break;
-      default:
-        break;
+      // Handle Master Forks
+      if (cluster.isMaster) {
+        const loader = new Loader(_this.logger, _this.configMain);
+        const builder = new Builder(_this.logger, _this.configMain);
+        const configs = await loader.handleConfigs();
+        await _this.client.master.commands.schema.handleSchema(configs);
+        await _this.client.worker.commands.schema.handleSchema(configs);
+        builder.configs = configs;
+        builder.setupPoolServer();
+        builder.setupPoolWorkers();
       }
-    }
-  };
-};
+
+      // Handle Worker Forks
+      if (cluster.isWorker) {
+        switch (process.env.type) {
+          case 'server':
+            new Server(_this.logger, _this.client).setupServer(() => { });
+            break;
+          case 'worker':
+            new Workers(_this.logger, _this.client).setupWorkers(() => { });
+            break;
+          default:
+            break;
+        }
+      }
+    };
+  }
+}
 
 export default Threads;
