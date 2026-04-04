@@ -6,47 +6,52 @@ import LocalTransactions from './local/transactions.js';
 ////////////////////////////////////////////////////////////////////////////////
 
 // Main Command Function
-const Commands = function (logger, client, configMain) {
+class Commands {
+  constructor(logger, client, configMain) {
 
-  const _this = this;
-  this.logger = logger;
-  this.client = client;
-  this.configMain = configMain;
-  this.text = Text[configMain.language];
-  this.timing = [1000, 5000, 30000];
+    const _this = this;
+    this.logger = logger;
+    this.client = client;
+    this.configMain = configMain;
+    this.text = Text[configMain.language];
+    this.timing = [1000, 5000, 30000];
 
-  // Database Table Structure
-  this.local = {};
-  this.retries = 0;
+    // Database Table Structure
+    this.local = {};
+    this.retries = 0;
 
-  // Execute Commands
-   
-  this.executor = function(commands, callback) {
-    const query = commands.join(' ')
-    _this.client.query(query, (error, results) => {
-      if (error) _this.retry(commands, error, callback);
-      else callback(results);
-    });
-  };
+    // Execute Commands (async/await version)
+    this.executor = async function (commands) {
+      const query = commands.join(' ');
+      try {
+        const results = await _this.client.query(query);
+        _this.retries = 0; // Reset retries on success
+        return results;
+      } catch (error) {
+        return _this.retry(commands, error);
+      }
+    };
 
-  // Handle Retries
-  this.retry = function(commands, error, callback) {
-    if (_this.retries < 3) {
-      const lines = [_this.text.databaseCommandsText3(_this.retries)];
-      _this.logger.error('Database', 'Worker', lines);
-      setTimeout(() => {
-        _this.executor(commands, callback);
+    // Handle Retries (async/await version)
+    this.retry = async function (commands, error) {
+      if (_this.retries < 3) {
+        const lines = [_this.text.databaseCommandsText3(_this.retries)];
+        _this.logger.error('Database', 'Worker', lines);
+        await new Promise(resolve => setTimeout(resolve, _this.timing[_this.retries] || 1000));
         _this.retries += 1;
-      }, _this.timing[_this.retries] || 1000);
-    } else throw new Error(error);
-  };
+        return _this.executor(commands);
+      } else {
+        throw error;
+      }
+    };
 
-  // Build Out Schema Generation
-  this.schema = new Schema(_this.logger, _this.executor, _this.configMain);
+    // Build Out Schema Generation
+    this.schema = new Schema(_this.logger, _this.executor, _this.configMain);
 
-  // Initialize Local Commands
-  this.local.shares = new LocalShares(_this.logger, _this.configMain);
-  this.local.transactions = new LocalTransactions(_this.logger, _this.configMain);
-};
+    // Initialize Local Commands
+    this.local.shares = new LocalShares(_this.logger, _this.configMain);
+    this.local.transactions = new LocalTransactions(_this.logger, _this.configMain);
+  }
+}
 
 export default Commands;
