@@ -73,7 +73,12 @@ class Api {
       // Handle Parameters
       const queries = req.query || {};
       const output = (code, message) => callback(code, message);
-      const pool = utils.validateParameters((req.params || {}).pool || '');
+      let pool = utils.validateParameters((req.params || {}).pool || '');
+      // Make pool name matching case-insensitive
+      const poolKey = Object.keys(_this.configs).find(
+        (key) => key.toLowerCase() === pool.toLowerCase()
+      );
+      if (poolKey) pool = poolKey;
       const category = utils.validateParameters((req.params || {}).category || '');
       const endpoint = utils.validateParameters((req.params || {}).endpoint || '');
 
