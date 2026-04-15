@@ -235,7 +235,7 @@ class Statistics {
         const hashrate = lookups[7].rows;
         const sharedWorkers = lookups[16].rows;
         const sharedWorkersUpdates = _this.handleCurrentWorkers(hashrate, sharedWorkers, 'primary');
-        console.log('Shared Workers Updates:', JSON.stringify(sharedWorkersUpdates));
+        //console.log('Shared Workers Updates:', JSON.stringify(sharedWorkersUpdates));
         transaction.push(_this.master.current.workers.insertCurrentWorkersHashrate(
           _this.pool, sharedWorkersUpdates));
       }
